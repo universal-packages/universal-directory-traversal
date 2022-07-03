@@ -37,10 +37,23 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
     try {
       const subfile = path.resolve(root.path, rawFiles[i])
       const subfileStats = fs.statSync(subfile)
+      const fileOrDirectoryName = subfile.substring(subfile.lastIndexOf('/') + 1)
 
       // Spliting
       if (subfileStats.isDirectory()) {
-        directories.push(subfile)
+        if (options.directoryFilter) {
+          if (Array.isArray(options.directoryFilter)) {
+            if (options.directoryFilter.includes(fileOrDirectoryName)) {
+              directories.push(subfile)
+            }
+          } else {
+            if (new RegExp(options.directoryFilter).exec(fileOrDirectoryName) !== null) {
+              directories.push(subfile)
+            }
+          }
+        } else {
+          directories.push(subfile)
+        }
       } else {
         if (options.fileFilter) {
           if (Array.isArray(options.fileFilter)) {
@@ -51,7 +64,7 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
               root.files.push(subfile)
             }
           } else {
-            if (new RegExp(options.fileFilter).exec(subfile) !== null) {
+            if (new RegExp(options.fileFilter).exec(fileOrDirectoryName) !== null) {
               root.files.push(subfile)
             }
           }

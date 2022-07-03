@@ -45,6 +45,46 @@ describe('traverse', (): void => {
   })
 
   describe('options', (): void => {
+    describe('directoryFilter', (): void => {
+      it('filter files with an array of extesions to include', async (): Promise<void> => {
+        const directoryMap = await traverse('./tests/__fixtures__', { directoryFilter: ['level1A'] })
+
+        expect(directoryMap).toMatchObject({
+          path: expect.stringMatching(/__fixtures__/),
+          files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
+          directories: [
+            {
+              path: expect.stringMatching(/__fixtures__\/level1A/),
+              files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/), expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
+              directories: []
+            }
+          ]
+        })
+      })
+
+      it('filter files with an regex expression', async (): Promise<void> => {
+        const directoryMap = await traverse('./tests/__fixtures__', { directoryFilter: /level.B$/ })
+
+        expect(directoryMap).toMatchObject({
+          path: expect.stringMatching(/__fixtures__/),
+          files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
+          directories: [
+            {
+              path: expect.stringMatching(/__fixtures__\/level1B/),
+              files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/), expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
+              directories: [
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+                  files: [expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.html/), expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.pdf/)],
+                  directories: []
+                }
+              ]
+            }
+          ]
+        })
+      })
+    })
+
     describe('fileFilter', (): void => {
       it('filter files with an array of extesions to include', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: ['html'] })

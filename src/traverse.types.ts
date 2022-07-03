@@ -2,6 +2,7 @@ export type TraverseCallback = (directoryMap: DirectoryMap) => boolean | Promise
 
 export interface DirectoryTraversalOptions {
   callback?: TraverseCallback
+  directoryFilter?: RegExp | string[]
   fileFilter?: RegExp | string[]
   maxDepth?: number
 }
