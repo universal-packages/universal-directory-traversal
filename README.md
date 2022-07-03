@@ -83,14 +83,26 @@ const directoryMap = await traverse('~/projects', {
 })
 ```
 
-- `fileFilter` To only include files that satifice this contition
+- `directoryFilter` To only include direcotries that satisfice this contition
+
+```js
+{
+  // An array of directory names to only include those in the mapping
+  fileFilter: ['config', 'app', 'db'],
+
+  // Or a regex expresions to only include directory names that matches
+  fileFilter: /.*-config/
+}
+```
+
+- `fileFilter` To only include files that satisfice this contition
 
 ```js
 {
   // An array of file extensions to only include those in the mapping
   fileFilter: ['yml', 'ymal', 'js', 'json'],
 
-  // Or a regex expresions to only include file names that matche
+  // Or a regex expresions to only include file names that matches
   fileFilter: /.*\.especial.[js|ts]/
 }
 ```
