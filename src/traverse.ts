@@ -12,7 +12,7 @@ import { DirectoryTraversalOptions, DirectoryMap } from './traverse.types'
  */
 export async function traverse(location: string, options: DirectoryTraversalOptions = {}): Promise<DirectoryMap> {
   const finalLocation = checkDirectory(location)
-  const root: DirectoryMap = { path: finalLocation, files: [], directories: [] }
+  const root: DirectoryMap = { path: finalLocation, basename: path.basename(finalLocation), files: [], directories: [] }
 
   await recursiveTraverse(root, 0, options)
 
@@ -37,23 +37,10 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
     try {
       const subfile = path.resolve(root.path, rawFiles[i])
       const subfileStats = fs.statSync(subfile)
-      const fileOrDirectoryName = subfile.substring(subfile.lastIndexOf('/') + 1)
 
       // Spliting
       if (subfileStats.isDirectory()) {
-        if (options.directoryFilter) {
-          if (Array.isArray(options.directoryFilter)) {
-            if (options.directoryFilter.includes(fileOrDirectoryName)) {
-              directories.push(subfile)
-            }
-          } else {
-            if (new RegExp(options.directoryFilter).exec(fileOrDirectoryName) !== null) {
-              directories.push(subfile)
-            }
-          }
-        } else {
-          directories.push(subfile)
-        }
+        directories.push(subfile)
       } else {
         if (options.fileFilter) {
           if (Array.isArray(options.fileFilter)) {
@@ -64,7 +51,9 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
               root.files.push(subfile)
             }
           } else {
-            if (new RegExp(options.fileFilter).exec(fileOrDirectoryName) !== null) {
+            const fileName = path.basename(subfile)
+
+            if (new RegExp(options.fileFilter).exec(fileName) !== null) {
               root.files.push(subfile)
             }
           }
@@ -75,6 +64,12 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
     } catch {
       // Only include files we can access, so nothing to do here
     }
+  }
+
+  // We feed the current root with its directory so the call back can access and deside
+  // depending of these entries
+  for (let i = 0; i < directories.length; i++) {
+    root.directories.push({ path: directories[i], basename: path.basename(directories[i]), files: [], directories: [] })
   }
 
   // Now is time to call the callback if provided
@@ -92,9 +87,7 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
 
   // We go through the directories recursively
   for (let i = 0; i < directories.length; i++) {
-    const nextDirectory = { path: directories[i], files: [], directories: [] }
-
-    root.directories.push(nextDirectory)
+    const nextDirectory = root.directories[i]
 
     await recursiveTraverse(nextDirectory, level + 1, options)
   }

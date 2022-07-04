@@ -4,21 +4,25 @@ describe('traverse', (): void => {
   it('traverse a directory and returns and directory map object', async (): Promise<void> => {
     const directoryMap = await traverse('./tests/__fixtures__')
 
-    expect(directoryMap).toMatchObject({
+    expect(directoryMap).toEqual({
       path: expect.stringMatching(/__fixtures__/),
+      basename: '__fixtures__',
       files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
       directories: [
         {
           path: expect.stringMatching(/__fixtures__\/level1A/),
+          basename: 'level1A',
           files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/), expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1A\/level2A/),
+              basename: 'level2A',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.html/), expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.pdf/)],
               directories: []
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1A\/level2B/),
+              basename: 'level2B',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.html/), expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.pdf/)],
               directories: []
             }
@@ -26,15 +30,18 @@ describe('traverse', (): void => {
         },
         {
           path: expect.stringMatching(/__fixtures__\/level1B/),
+          basename: 'level1B',
           files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/), expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1B\/level2A/),
+              basename: 'level2A',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2A\/level3.html/), expect.stringMatching(/__fixtures__\/level1B\/level2A\/level3.pdf/)],
               directories: []
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+              basename: 'level2B',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.html/), expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.pdf/)],
               directories: []
             }
@@ -45,65 +52,29 @@ describe('traverse', (): void => {
   })
 
   describe('options', (): void => {
-    describe('directoryFilter', (): void => {
-      it('filter files with an array of extesions to include', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', { directoryFilter: ['level1A'] })
-
-        expect(directoryMap).toMatchObject({
-          path: expect.stringMatching(/__fixtures__/),
-          files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
-          directories: [
-            {
-              path: expect.stringMatching(/__fixtures__\/level1A/),
-              files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/), expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
-              directories: []
-            }
-          ]
-        })
-      })
-
-      it('filter files with an regex expression', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', { directoryFilter: /level.B$/ })
-
-        expect(directoryMap).toMatchObject({
-          path: expect.stringMatching(/__fixtures__/),
-          files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
-          directories: [
-            {
-              path: expect.stringMatching(/__fixtures__\/level1B/),
-              files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/), expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
-              directories: [
-                {
-                  path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
-                  files: [expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.html/), expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.pdf/)],
-                  directories: []
-                }
-              ]
-            }
-          ]
-        })
-      })
-    })
-
     describe('fileFilter', (): void => {
       it('filter files with an array of extesions to include', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: ['html'] })
 
-        expect(directoryMap).toMatchObject({
+        expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
+          basename: '__fixtures__',
           files: [expect.stringMatching(/__fixtures__\/level1.html/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1A/),
+              basename: 'level1A',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/)],
               directories: [
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2A/),
+                  basename: 'level2A',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.html/)],
                   directories: []
                 },
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2B/),
+                  basename: 'level2B',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.html/)],
                   directories: []
                 }
@@ -111,15 +82,18 @@ describe('traverse', (): void => {
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1B/),
+              basename: 'level1B',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/)],
               directories: [
                 {
                   path: expect.stringMatching(/__fixtures__\/level1B\/level2A/),
+                  basename: 'level2A',
                   files: [expect.stringMatching(/__fixtures__\/level1B\/level2A\/level3.html/)],
                   directories: []
                 },
                 {
                   path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+                  basename: 'level2B',
                   files: [expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.html/)],
                   directories: []
                 }
@@ -132,21 +106,25 @@ describe('traverse', (): void => {
       it('filter files with an regex expression', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: /.*pdf$/ })
 
-        expect(directoryMap).toMatchObject({
+        expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
+          basename: '__fixtures__',
           files: [expect.stringMatching(/__fixtures__\/level1.pdf/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1A/),
+              basename: 'level1A',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
               directories: [
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2A/),
+                  basename: 'level2A',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.pdf/)],
                   directories: []
                 },
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2B/),
+                  basename: 'level2B',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.pdf/)],
                   directories: []
                 }
@@ -154,15 +132,18 @@ describe('traverse', (): void => {
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1B/),
+              basename: 'level1B',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
               directories: [
                 {
                   path: expect.stringMatching(/__fixtures__\/level1B\/level2A/),
+                  basename: 'level2A',
                   files: [expect.stringMatching(/__fixtures__\/level1B\/level2A\/level3.pdf/)],
                   directories: []
                 },
                 {
                   path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+                  basename: 'level2B',
                   files: [expect.stringMatching(/__fixtures__\/level1B\/level2B\/level3.pdf/)],
                   directories: []
                 }
@@ -177,19 +158,48 @@ describe('traverse', (): void => {
       it('limits how dept the traverse go', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', { maxDepth: 1 })
 
-        expect(directoryMap).toMatchObject({
+        expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
+          basename: '__fixtures__',
           files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1A/),
+              basename: 'level1A',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/), expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
-              directories: []
+              directories: [
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1A\/level2A/),
+                  basename: 'level2A',
+                  files: [],
+                  directories: []
+                },
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1A\/level2B/),
+                  basename: 'level2B',
+                  files: [],
+                  directories: []
+                }
+              ]
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1B/),
+              basename: 'level1B',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/), expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
-              directories: []
+              directories: [
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1B\/level2A/),
+                  basename: 'level2A',
+                  files: [],
+                  directories: []
+                },
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+                  basename: 'level2B',
+                  files: [],
+                  directories: []
+                }
+              ]
             }
           ]
         })
@@ -204,21 +214,25 @@ describe('traverse', (): void => {
           }
         })
 
-        expect(directoryMap).toMatchObject({
+        expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
+          basename: '__fixtures__',
           files: [expect.stringMatching(/__fixtures__\/level1.html/), expect.stringMatching(/__fixtures__\/level1.pdf/)],
           directories: [
             {
               path: expect.stringMatching(/__fixtures__\/level1A/),
+              basename: 'level1A',
               files: [expect.stringMatching(/__fixtures__\/level1A\/level2.html/), expect.stringMatching(/__fixtures__\/level1A\/level2.pdf/)],
               directories: [
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2A/),
+                  basename: 'level2A',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.html/), expect.stringMatching(/__fixtures__\/level1A\/level2A\/level3.pdf/)],
                   directories: []
                 },
                 {
                   path: expect.stringMatching(/__fixtures__\/level1A\/level2B/),
+                  basename: 'level2B',
                   files: [expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.html/), expect.stringMatching(/__fixtures__\/level1A\/level2B\/level3.pdf/)],
                   directories: []
                 }
@@ -226,8 +240,22 @@ describe('traverse', (): void => {
             },
             {
               path: expect.stringMatching(/__fixtures__\/level1B/),
+              basename: 'level1B',
               files: [expect.stringMatching(/__fixtures__\/level1B\/level2.html/), expect.stringMatching(/__fixtures__\/level1B\/level2.pdf/)],
-              directories: []
+              directories: [
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1B\/level2A/),
+                  basename: 'level2A',
+                  files: [],
+                  directories: []
+                },
+                {
+                  path: expect.stringMatching(/__fixtures__\/level1B\/level2B/),
+                  basename: 'level2B',
+                  files: [],
+                  directories: []
+                }
+              ]
             }
           ]
         })
