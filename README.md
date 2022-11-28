@@ -19,14 +19,32 @@ The traverse function will go recursively from a root directory until it maps th
 ```js
 import { traverse } from '@universal-packages/directory-traversal'
 
-async function test() {
-  const directoryMap = await traverse('~/projects')
+const directoryMap = await traverse('~/projects')
 
-  console.log(directoryMap)
-}
-
-test()
+console.log(directoryMap)
 ```
+
+### Options
+
+You can modify the behavior of the traverse function by providing options.
+
+- **`callback`** `Function`
+  A function to call for every mapped directory for you to analyze in place, return false if you want to stop going deeper into that directory.
+
+  ```js
+  const directoryMap = await traverse('~/projects', {
+    callback: (directoryMap) => {
+      if (directoryMap.path.include('homework')) {
+        return false
+      }
+    }
+  })
+  ```
+
+- **`fileFilter`** `(yml | yaml | js | json)[] | Regex`
+  To only include files that satisfies this condition.
+- **`maxDepth`** `Number`
+  To only map files going this level deep.
 
 ### DirectoryMap
 
@@ -51,55 +69,9 @@ From the traverse example you will get something like this:
         "home/projects/universal-directory-traversal/tsconfig.dis.json",
         "home/projects/universal-directory-traversal/tsconfig.json"
       ],
-      "directories": [...]
+      "directories": []
     }
   ]
-}
-```
-
-## Options
-
-You can modify the behavior of the traverse function by providing options.
-
-```ts
-interface DirectoryTraversalOptions {
-  callback?: (directoryMap: DirectoryMap) => boolean | Promise<boolean>
-  fileFilter?: RegExp | string[]
-  maxDepth?: number
-}
-```
-
-where:
-
-- `callback` A function to call for every mapped directory for you to analyze in place, return false if you want to stop going deeper into that directory.
-
-```js
-const directoryMap = await traverse('~/projects', {
-  callback: (directoryMap) => {
-    if (directoryMap.path.include('homework')) {
-      return false
-    }
-  }
-})
-```
-
-- `fileFilter` To only include files that satisfice this contition
-
-```js
-{
-  // An array of file extensions to only include those in the mapping
-  fileFilter: ['yml', 'ymal', 'js', 'json'],
-
-  // Or a regex expresions to only include file names that matches
-  fileFilter: /.*\.especial.[js|ts]/
-}
-```
-
-- `maxDepth` To only map files going this level deep
-
-```js
-{
-  maxDepth: 3
 }
 ```
 
@@ -109,7 +81,7 @@ This library is developed in TypeScript and shipped fully typed.
 
 ## Contributing
 
-The development of this library in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving this library.
+The development of this library happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving this library.
 
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
 - [Contributing Guide](./CONTRIBUTING.md)

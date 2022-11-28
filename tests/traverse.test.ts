@@ -53,7 +53,7 @@ describe('traverse', (): void => {
 
   describe('options', (): void => {
     describe('fileFilter', (): void => {
-      it('filter files with an array of extesions to include', async (): Promise<void> => {
+      it('filter files with an array of extensions to include', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: ['html'] })
 
         expect(directoryMap).toEqual({
@@ -207,7 +207,7 @@ describe('traverse', (): void => {
     })
 
     describe('callback', (): void => {
-      it('let the user do something to every directory maped and limit if it should continue', async (): Promise<void> => {
+      it('let the user do something to every directory mapped and limit if it should continue', async (): Promise<void> => {
         const directoryMap = await traverse('./tests/__fixtures__', {
           callback: (directoryMap: DirectoryMap): boolean => {
             return !directoryMap.path.includes('B')
