@@ -12,7 +12,9 @@ Sometimes you just need a way to map a directory to either load modules in real 
 npm install @universal-packages/directory-traversal
 ```
 
-## traverse()
+## Global methods
+
+#### **`traverse(locations: String, [options])`**
 
 The traverse function will go recursively from a root directory until it maps the whole tree, you can execute a callback for every visited directory after being mapped, limit the depth and filter for files you want or you not want to be mapped, returning a `DirectoryMap` object
 
@@ -46,7 +48,7 @@ You can modify the behavior of the traverse function by providing options.
 - **`maxDepth`** `Number`
   To only map files going this level deep.
 
-### DirectoryMap
+## DirectoryMap
 
 From the traverse example you will get something like this:
 
