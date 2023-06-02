@@ -1,7 +1,8 @@
+import { checkDirectory } from '@universal-packages/fs-utils'
 import fs from 'fs'
 import path from 'path'
-import { checkDirectory } from '@universal-packages/fs-utils'
-import { DirectoryTraversalOptions, DirectoryMap } from './traverse.types'
+
+import { DirectoryMap, DirectoryTraversalOptions } from './traverse.types'
 
 /**
  *
