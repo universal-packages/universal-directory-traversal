@@ -1,6 +1,6 @@
 import { DirectoryMap, traverse } from '../src'
 
-describe('traverse', (): void => {
+describe(traverse, (): void => {
   it('traverse a directory and returns and directory map object', async (): Promise<void> => {
     const directoryMap = await traverse('./tests/__fixtures__')
 
