@@ -21,7 +21,7 @@ The traverse function will go recursively from a root directory until it maps th
 ```js
 import { traverse } from '@universal-packages/directory-traversal'
 
-const directoryMap = await traverse('~/projects')
+const directoryMap = traverse('~/projects')
 
 console.log(directoryMap)
 ```
@@ -34,7 +34,7 @@ You can modify the behavior of the traverse function by providing options.
   A function to call for every mapped directory for you to analyze in place, return false if you want to stop going deeper into that directory.
 
   ```js
-  const directoryMap = await traverse('~/projects', {
+  const directoryMap = traverse('~/projects', {
     callback: (directoryMap) => {
       if (directoryMap.path.include('homework')) {
         return false
