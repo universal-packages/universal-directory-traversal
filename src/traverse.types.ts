@@ -1,4 +1,4 @@
-export type TraverseCallback = (directoryMap: DirectoryMap) => boolean | Promise<boolean>
+export type TraverseCallback = (directoryMap: DirectoryMap) => boolean
 
 export interface DirectoryTraversalOptions {
   callback?: TraverseCallback

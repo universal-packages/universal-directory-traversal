@@ -2,7 +2,7 @@ import { DirectoryMap, traverse } from '../src'
 
 describe(traverse, (): void => {
   it('traverse a directory and returns and directory map object', async (): Promise<void> => {
-    const directoryMap = await traverse('./tests/__fixtures__')
+    const directoryMap = traverse('./tests/__fixtures__')
 
     expect(directoryMap).toEqual({
       path: expect.stringMatching(/__fixtures__/),
@@ -54,7 +54,7 @@ describe(traverse, (): void => {
   describe('options', (): void => {
     describe('fileFilter', (): void => {
       it('filter files with an array of extensions to include', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: ['html'] })
+        const directoryMap = traverse('./tests/__fixtures__', { fileFilter: ['html'] })
 
         expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
@@ -104,7 +104,7 @@ describe(traverse, (): void => {
       })
 
       it('filter files with an regex expression', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', { fileFilter: /.*pdf$/ })
+        const directoryMap = traverse('./tests/__fixtures__', { fileFilter: /.*pdf$/ })
 
         expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
@@ -156,7 +156,7 @@ describe(traverse, (): void => {
 
     describe('maxDepth', (): void => {
       it('limits how dept the traverse go', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', { maxDepth: 1 })
+        const directoryMap = traverse('./tests/__fixtures__', { maxDepth: 1 })
 
         expect(directoryMap).toEqual({
           path: expect.stringMatching(/__fixtures__/),
@@ -208,7 +208,7 @@ describe(traverse, (): void => {
 
     describe('callback', (): void => {
       it('let the user do something to every directory mapped and limit if it should continue', async (): Promise<void> => {
-        const directoryMap = await traverse('./tests/__fixtures__', {
+        const directoryMap = traverse('./tests/__fixtures__', {
           callback: (directoryMap: DirectoryMap): boolean => {
             return !directoryMap.path.includes('B')
           }

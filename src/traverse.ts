@@ -11,17 +11,17 @@ import { DirectoryMap, DirectoryTraversalOptions } from './traverse.types'
  * for every visited directory after being mapped
  *
  */
-export async function traverse(location: string, options: DirectoryTraversalOptions = {}): Promise<DirectoryMap> {
+export function traverse(location: string, options: DirectoryTraversalOptions = {}): DirectoryMap {
   const finalLocation = checkDirectory(location)
   const root: DirectoryMap = { path: finalLocation, basename: path.basename(finalLocation), files: [], directories: [] }
 
-  await recursiveTraverse(root, 0, options)
+  recursiveTraverse(root, 0, options)
 
   return root
 }
 
 /** Recursively go through directory trees */
-async function recursiveTraverse(root: DirectoryMap, level: number, options: DirectoryTraversalOptions): Promise<void> {
+function recursiveTraverse(root: DirectoryMap, level: number, options: DirectoryTraversalOptions): void {
   let rawFiles: string[]
   const directories: string[] = []
 
@@ -76,7 +76,7 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
   // Now is time to call the callback if provided
   if (options.callback) {
     // We only go deeper if the callback is true
-    const shouldContinue = await options.callback(root)
+    const shouldContinue = options.callback(root)
 
     if (!shouldContinue) return
   }
@@ -90,6 +90,6 @@ async function recursiveTraverse(root: DirectoryMap, level: number, options: Dir
   for (let i = 0; i < directories.length; i++) {
     const nextDirectory = root.directories[i]
 
-    await recursiveTraverse(nextDirectory, level + 1, options)
+    recursiveTraverse(nextDirectory, level + 1, options)
   }
 }
